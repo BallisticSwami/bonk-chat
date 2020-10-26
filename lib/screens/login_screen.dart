@@ -1,4 +1,4 @@
-import 'package:flash_chat/utilities/size_config.dart';
+import 'package:bonk_chat/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -9,34 +9,58 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-            horizontal: SizeConfig.safeBlockHorizontal * 12),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Hero(
-              tag: 'logo',
-                          child: Container(
-                height: SizeConfig.safeBlockVertical * 22,
-                child: Image.asset('assets/images/bonk.png'),
-              ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(right: SizeConfig.safeBlockHorizontal * 9),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                SizedBox(
+                  width: SizeConfig.safeBlockHorizontal * 62,
+                  child: Image.asset(
+                    'assets/images/log_in_t.png',
+                  ),
+                ),
+                Hero(
+                  tag: 'logo',
+                  child: SizedBox(
+                    width: SizeConfig.safeBlockHorizontal * 62,
+                    child: Image.asset(
+                      'assets/images/log_in_b.png',
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SizedBox(
-              height: SizeConfig.safeBlockVertical * 5.2,
-            ),
-            TextField(
+          ),
+          SizedBox(
+            height: SizeConfig.safeBlockVertical * 5.2,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.safeBlockHorizontal * 12),
+            child: TextField(
               onChanged: (value) {
                 //Do something with the user input.
               },
               decoration: InputDecoration(
                 hintText: 'Enter your email',
+                hintStyle: TextStyle(color: Colors.deepPurple[900].withOpacity(0.6)),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: SizeConfig.safeBlockVertical * 1.5,
                     horizontal: SizeConfig.safeBlockHorizontal * 4.6),
@@ -57,16 +81,21 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: SizeConfig.safeBlockVertical * 1,
-            ),
-            TextField(
+          ),
+          SizedBox(
+            height: SizeConfig.safeBlockVertical * 1,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: SizeConfig.safeBlockHorizontal * 12),
+            child: TextField(
               onChanged: (value) {
                 //Do something with the user input.
               },
               obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Enter your password.',
+                hintStyle: TextStyle(color: Colors.deepPurple[900].withOpacity(0.6)),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: SizeConfig.safeBlockVertical * 1.5,
                     horizontal: SizeConfig.safeBlockHorizontal * 4.6),
@@ -87,28 +116,28 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ),
-            SizedBox(
-              height: SizeConfig.safeBlockVertical*3,
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: SizeConfig.safeBlockVertical*2),
-              child: ClipRRect(
-                borderRadius:
-                    BorderRadius.circular(SizeConfig.safeBlockHorizontal * 40),
-                child: FlatButton(
-                  color: Colors.deepPurple[400],
-                  onPressed: () {
-                    
-                  },
-                  child: Container(
-                      alignment: Alignment.center,
-                      height: SizeConfig.safeBlockVertical * 5.7,
-                      child: Text('Log In')),
-                ),
+          ),
+          SizedBox(
+            height: SizeConfig.safeBlockVertical * 3,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                vertical: SizeConfig.safeBlockVertical * 2,
+                horizontal: SizeConfig.safeBlockHorizontal * 12),
+            child: ClipRRect(
+              borderRadius:
+                  BorderRadius.circular(SizeConfig.safeBlockHorizontal * 40),
+              child: FlatButton(
+                color: Colors.deepPurple[400],
+                onPressed: () {},
+                child: Container(
+                    alignment: Alignment.center,
+                    height: SizeConfig.safeBlockVertical * 5.7,
+                    child: Text('CONTINUE')),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

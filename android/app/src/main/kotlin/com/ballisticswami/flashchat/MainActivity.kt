@@ -1,4 +1,4 @@
-package com.ballisticswami.flashchat
+package com.ballisticswami.bonkchat
 
 import io.flutter.embedding.android.FlutterActivity
 

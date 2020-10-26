@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flash_chat/screens/welcome_screen.dart';
-import 'package:flash_chat/screens/login_screen.dart';
-import 'package:flash_chat/screens/registration_screen.dart';
-import 'package:flash_chat/screens/chat_screen.dart';
+import 'package:bonk_chat/screens/welcome_screen.dart';
+import 'package:bonk_chat/screens/login_screen.dart';
+import 'package:bonk_chat/screens/registration_screen.dart';
+import 'package:bonk_chat/screens/chat_screen.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(FlashChat());
 
 class FlashChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
+        statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       theme: myLightTheme,
       initialRoute: WelcomeScreen.id,
@@ -20,7 +27,6 @@ class FlashChat extends StatelessWidget {
       //   ChatScreen.id: (context) => ChatScreen()
       // },
       onGenerateRoute: (routeSettings) {
-
         return PageRouteBuilder<dynamic>(
             settings: routeSettings,
             pageBuilder: (context, Animation<double> animation,
@@ -39,12 +45,11 @@ class FlashChat extends StatelessWidget {
               }
             },
             transitionDuration: Duration(milliseconds: 200),
-            transitionsBuilder: (context,
-                Animation<double> animation,
-                Animation<double> secondaryAnimation,
-                Widget child) {
+            reverseTransitionDuration: Duration(milliseconds: 200),
+            transitionsBuilder: (context, Animation<double> animation,
+                Animation<double> secondaryAnimation, Widget child) {
               return effectMap[PageTransitionType.slideLeft](
-                  Curves.easeInSine, animation, secondaryAnimation, child);
+                  Curves.easeOut, animation, secondaryAnimation, child);
             });
       },
     );
