@@ -3,6 +3,7 @@ import 'package:bonk_chat/screens/login_screen.dart';
 import 'package:bonk_chat/screens/registration_screen.dart';
 import 'package:bonk_chat/utilities/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:bonk_chat/components/startup_widgets.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const String id = '/';
@@ -35,7 +36,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
     );
 
     rot = Tween<double>(
-      begin: 1.8* pi,
+      begin: 1.8 * pi,
       end: 2 * pi,
     ).animate(bonkController);
 
@@ -60,6 +61,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
   @override
   void dispose() {
     controller.dispose();
+    bonkController.dispose();
     super.dispose();
   }
 
@@ -86,7 +88,8 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                 Hero(
                   tag: 'logo',
                   child: SizedBox(
-                    width: animation.value * SizeConfig.safeBlockHorizontal * 70,
+                    width:
+                        animation.value * SizeConfig.safeBlockHorizontal * 70,
                     child: Transform.rotate(
                       alignment: Alignment.centerLeft,
                       angle: rot.value,
@@ -102,46 +105,22 @@ class _WelcomeScreenState extends State<WelcomeScreen>
           SizedBox(
             height: SizeConfig.safeBlockVertical * 4,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeConfig.safeBlockVertical * 2,
-                horizontal: SizeConfig.safeBlockHorizontal * 12),
-            child: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(SizeConfig.safeBlockHorizontal * 40),
-              child: FlatButton(
-                color: Colors.deepPurple[400],
-                onPressed: () {
-                  Navigator.of(context).pushNamed(LoginScreen.id);
-                },
-                child: Container(
-                    alignment: Alignment.center,
-                    height: SizeConfig.safeBlockVertical * 5.7,
-                    child: Text('LOG IN')),
-              ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeConfig.safeBlockVertical * 2,
-                horizontal: SizeConfig.safeBlockHorizontal * 12),
-            child: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(SizeConfig.safeBlockHorizontal * 40),
-              child: FlatButton(
-                color: Colors.pinkAccent[700],
-                onPressed: () {
-                  Navigator.of(context).pushNamed(RegistrationScreen.id);
-                },
-                child: Container(
-                    alignment: Alignment.center,
-                    height: SizeConfig.safeBlockVertical * 5.7,
-                    child: Text('REGISTER')),
-              ),
-            ),
-          ),
+          PageButton(
+              text: 'LOG IN',
+              color: Colors.deepPurple[400],
+              onPressed: () {
+                Navigator.of(context).pushNamed(LoginScreen.id);
+              }),
+          PageButton(
+            text: 'REGISTER',
+            color: Colors.pinkAccent[700],
+            onPressed: () {
+              Navigator.of(context).pushNamed(RegistrationScreen.id);
+            },
+          )
         ],
       ),
     );
   }
 }
+

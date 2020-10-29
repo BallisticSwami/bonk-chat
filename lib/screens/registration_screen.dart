@@ -1,5 +1,6 @@
 import 'package:bonk_chat/utilities/size_config.dart';
 import 'package:flutter/material.dart';
+import 'package:bonk_chat/components/startup_widgets.dart';
 
 class RegistrationScreen extends StatefulWidget {
   static const String id = '/register';
@@ -52,28 +53,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               onChanged: (value) {
                 //Do something with the user input.
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                hintStyle: TextStyle(color: Colors.pink[900].withOpacity(0.5)),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: SizeConfig.safeBlockVertical * 1.5,
-                    horizontal: SizeConfig.safeBlockHorizontal * 4.6),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors.pink[200],
-                      width: SizeConfig.safeBlockHorizontal * 0.5),
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors.pinkAccent[700],
-                      width: SizeConfig.safeBlockHorizontal * 0.8),
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-              ),
+              decoration: MyTextFieldInputDecoration().getInputDecoration(
+                  hintText: 'Enter your email',
+                  primaryColor: Colors.pinkAccent[700],
+                  secondaryColor: Colors.pink[200],
+                  textColor: Colors.pink[900]),
             ),
           ),
           SizedBox(
@@ -87,49 +71,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 //Do something with the user input.
               },
               obscureText: true,
-              decoration: InputDecoration(
-                hintText: 'Enter your password.',
-                hintStyle: TextStyle(color: Colors.pink[900].withOpacity(0.5)),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: SizeConfig.safeBlockVertical * 1.5,
-                    horizontal: SizeConfig.safeBlockHorizontal * 4.6),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors.pink[200],
-                      width: SizeConfig.safeBlockHorizontal * 0.5),
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: Colors.pinkAccent[700],
-                      width: SizeConfig.safeBlockHorizontal * 0.8),
-                  borderRadius: BorderRadius.all(Radius.circular(200)),
-                ),
-              ),
+              decoration: MyTextFieldInputDecoration().getInputDecoration(
+                  hintText: 'Enter your password',
+                  primaryColor: Colors.pinkAccent[700],
+                  secondaryColor: Colors.pink[200],
+                  textColor: Colors.pink[900]),
             ),
           ),
           SizedBox(
             height: SizeConfig.safeBlockVertical * 3,
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(
-                vertical: SizeConfig.safeBlockVertical * 2,
-                horizontal: SizeConfig.safeBlockHorizontal * 12),
-            child: ClipRRect(
-              borderRadius:
-                  BorderRadius.circular(SizeConfig.safeBlockHorizontal * 40),
-              child: FlatButton(
-                color: Colors.pinkAccent[700],
-                onPressed: () {},
-                child: Container(
-                    alignment: Alignment.center,
-                    height: SizeConfig.safeBlockVertical * 5.7,
-                    child: Text('CONTINUE')),
-              ),
-            ),
+          PageButton(
+            text: 'CONTINUE',
+            color: Colors.pinkAccent[700],
+            onPressed: () {},
           ),
         ],
       ),
