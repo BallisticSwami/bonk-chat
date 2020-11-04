@@ -59,3 +59,36 @@ class MyTextFieldInputDecoration {
     );
   }
 }
+
+class EmailVerificationDialog extends StatelessWidget {
+
+  EmailVerificationDialog({this.onPressed});
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Email Verification Sent'),
+      content: Text(
+          'Please check your inbox to verify your account and Log In with your email and password'),
+      actions: [FlatButton(onPressed: onPressed, child: Text('OK'))],
+    );
+  }
+}
+
+class EmailNotVerifiedDialog extends StatelessWidget {
+
+  EmailNotVerifiedDialog({this.onPressed});
+  final Function onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Email Not Verified'),
+      content: Text(
+          'Your account has not been verified.\nPlease check your inbox to verify your account.'),
+      actions: [FlatButton(onPressed: onPressed, child: Text('OK'))],
+    );
+  }
+}
+

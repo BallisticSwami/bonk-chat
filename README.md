@@ -1,4 +1,4 @@
-# flashchat
+# bonkchat
 
 A new Flutter project.
 

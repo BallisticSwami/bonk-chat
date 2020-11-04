@@ -5,8 +5,13 @@ import 'package:bonk_chat/screens/registration_screen.dart';
 import 'package:bonk_chat/screens/chat_screen.dart';
 import 'package:flutter_page_transition/flutter_page_transition.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(FlashChat());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(FlashChat());
+}
 
 class FlashChat extends StatelessWidget {
   @override
@@ -56,13 +61,13 @@ class FlashChat extends StatelessWidget {
   }
 }
 
-ThemeData myLightTheme = ThemeData.light().copyWith(
+ThemeData myLightTheme = ThemeData(
+  primarySwatch: Colors.deepPurple,
   primaryColor: Colors.deepPurple[400],
   accentColor: Colors.deepPurple[400],
   scaffoldBackgroundColor: Colors.white,
   buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
   textTheme: TextTheme(
     bodyText2: TextStyle(color: Colors.black54),
-    subtitle1: TextStyle(color: Colors.purple[900]),
   ),
 );
