@@ -70,4 +70,9 @@ ThemeData myLightTheme = ThemeData(
   textTheme: TextTheme(
     bodyText2: TextStyle(color: Colors.black54),
   ),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: Colors.white,
+    elevation: 0,
+    contentTextStyle: TextStyle(color: Colors.pink[900], fontSize: 15, fontWeight: FontWeight.w400,),
+  ),
 );

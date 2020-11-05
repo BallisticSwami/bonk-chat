@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:bonk_chat/utilities/size_config.dart';
 
@@ -61,7 +62,6 @@ class MyTextFieldInputDecoration {
 }
 
 class EmailVerificationDialog extends StatelessWidget {
-
   EmailVerificationDialog({this.onPressed});
   final Function onPressed;
 
@@ -77,7 +77,6 @@ class EmailVerificationDialog extends StatelessWidget {
 }
 
 class EmailNotVerifiedDialog extends StatelessWidget {
-
   EmailNotVerifiedDialog({this.onPressed});
   final Function onPressed;
 
@@ -92,3 +91,37 @@ class EmailNotVerifiedDialog extends StatelessWidget {
   }
 }
 
+class ErrorHandling {
+  static void showErrorSnackbar(FirebaseAuthException e, BuildContext context) {
+    SnackBar mySnackBar;
+
+    if (e.code == 'unknown') {
+      mySnackBar = SnackBar(
+        content: Text(
+          'Please check your internet connection',
+          textAlign: TextAlign.center,
+        ),
+      );
+    } else {
+      mySnackBar = SnackBar(
+        content: Text(
+          '${e.message}',
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
+    Scaffold.of(context).showSnackBar(mySnackBar);
+  }
+
+  static void showAssErrorSnackbar(AssertionError e, BuildContext context) {
+    SnackBar mySnackBar;
+
+    mySnackBar = SnackBar(
+      content: Text(
+        'Please enter correct email and/or password',
+        textAlign: TextAlign.center,
+      ),
+    );
+    Scaffold.of(context).showSnackBar(mySnackBar);
+  }
+}
