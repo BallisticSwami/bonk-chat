@@ -39,28 +39,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: SizeConfig.safeBlockHorizontal * 12),
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: SizeConfig.safeBlockHorizontal * 75,
-                        child: Image.asset(
-                          'assets/images/register_t.png',
-                        ),
-                      ),
-                      Hero(
-                        tag: 'logo',
-                        child: SizedBox(
+                Flexible(
+                                  child: Padding(
+                    padding: EdgeInsets.only(
+                        right: SizeConfig.safeBlockHorizontal * 12),
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        SizedBox(
                           width: SizeConfig.safeBlockHorizontal * 75,
                           child: Image.asset(
-                            'assets/images/register_b.png',
+                            'assets/images/register_t.png',
                           ),
                         ),
-                      ),
-                    ],
+                        Hero(
+                          tag: 'logo',
+                          child: SizedBox(
+                            width: SizeConfig.safeBlockHorizontal * 75,
+                            child: Image.asset(
+                              'assets/images/register_b.png',
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(

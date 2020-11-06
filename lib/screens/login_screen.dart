@@ -19,6 +19,51 @@ class _LoginScreenState extends State<LoginScreen> {
   String password;
   bool showSpinner = false;
 
+  void _login(BuildContext context) async {
+    print('start');
+    FocusScope.of(context).unfocus();
+    try {
+      setState(() {
+        showSpinner = true;
+      });
+      final oldUser = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+
+      if (oldUser != null) {
+        if (!oldUser.user.emailVerified) {
+          setState(() {
+            showSpinner = false;
+          });
+          showDialog(
+              context: context,
+              builder: (context) {
+                return EmailNotVerifiedDialog(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                );
+              });
+        } else {
+          setState(() {
+            showSpinner = false;
+          });
+          Navigator.of(context).pushNamed(ChatScreen.id);
+        }
+      }
+    } on FirebaseAuthException catch (e) {
+      setState(() {
+        showSpinner = false;
+      });
+      ErrorHandling.showErrorSnackbar(e, context);
+    } on AssertionError catch (e) {
+      setState(() {
+        showSpinner = false;
+      });
+      ErrorHandling.showAssErrorSnackbar(e, context);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
       opacity: 0,
       color: Colors.black,
       progressIndicator: Padding(
-        padding: EdgeInsets.only(top: SizeConfig.safeBlockVertical * 55),
+        padding: EdgeInsets.only(top: SizeConfig.safeBlockVertical * 62),
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(Colors.deepPurple[400]),
           strokeWidth: SizeConfig.safeBlockHorizontal * 1.2,
@@ -41,28 +86,31 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Padding(
-                padding:
-                    EdgeInsets.only(right: SizeConfig.safeBlockHorizontal * 9),
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: SizeConfig.safeBlockHorizontal * 62,
-                      child: Image.asset(
-                        'assets/images/log_in_t.png',
-                      ),
-                    ),
-                    Hero(
-                      tag: 'logo',
-                      child: SizedBox(
+              SizedBox(height: SizeConfig.safeBlockVertical*6),
+              Flexible(
+                              child: Padding(
+                  padding:
+                      EdgeInsets.only(right: SizeConfig.safeBlockHorizontal * 9),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      SizedBox(
                         width: SizeConfig.safeBlockHorizontal * 62,
                         child: Image.asset(
-                          'assets/images/log_in_b.png',
+                          'assets/images/log_in_t.png',
                         ),
                       ),
-                    ),
-                  ],
+                      Hero(
+                        tag: 'logo',
+                        child: SizedBox(
+                          width: SizeConfig.safeBlockHorizontal * 62,
+                          child: Image.asset(
+                            'assets/images/log_in_b.png',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               SizedBox(
@@ -113,52 +161,17 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(
                 height: SizeConfig.safeBlockVertical * 3,
               ),
-              PageButton(
-                text: 'CONTINUE',
-                color: Colors.deepPurple[400],
-                onPressed: () async {
-                  try {
-                    setState(() {
-                      showSpinner = true;
-                    });
-                    final oldUser = await _auth.signInWithEmailAndPassword(
-                        email: email, password: password);
-
-                    if (oldUser != null) {
-                      if (!oldUser.user.emailVerified) {
-                        setState(() {
-                          showSpinner = false;
-                        });
-                        showDialog(
-                            context: context,
-                            builder: (context) {
-                              return EmailNotVerifiedDialog(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            });
-                      } else {
-                        setState(() {
-                          showSpinner = false;
-                        });
-                        Navigator.of(context).pushNamed(ChatScreen.id);
-                      }
-                    }
-                  } on FirebaseAuthException catch (e) {
-                    setState(() {
-                      showSpinner = false;
-                    });
-                    ErrorHandling.showErrorSnackbar(e, context);
-                  } on AssertionError catch (e) {
-                    setState(() {
-                      showSpinner = false;
-                    });
-                    ErrorHandling.showAssErrorSnackbar(e, context);
-                  } catch (e) {
-                    print(e);
-                  }
-                },
+              Column(
+                children: [
+                  PageButton(
+                    text: 'CONTINUE',
+                    color: Colors.deepPurple[400],
+                    onPressed: () async {
+                      _login(context);
+                    },
+                  ),
+                  ResetPasswordButton()
+                ],
               ),
             ],
           );

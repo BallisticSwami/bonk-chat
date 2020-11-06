@@ -5,6 +5,9 @@ import 'package:bonk_chat/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+final _firestore = FirebaseFirestore.instance;
+User loggedInUser;
+
 class ChatScreen extends StatefulWidget {
   static const String id = '/chat';
 
@@ -14,8 +17,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _auth = FirebaseAuth.instance;
-  final _firestore = FirebaseFirestore.instance;
-  User loggedInUser;
+
   String messageText;
   final myController = TextEditingController();
 
@@ -24,6 +26,9 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     getCurrentUser();
     print(loggedInUser.email);
+    Future.delayed(Duration(milliseconds: 500), () {
+      jumpChat();
+    });
   }
 
   @override
@@ -43,6 +48,10 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
+  void jumpChat() {
+    globalKey.currentState.animateToListEnd();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -51,7 +60,11 @@ class _ChatScreenState extends State<ChatScreen> {
         elevation: 0,
         leading: null,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.close), onPressed: () {}),
+          IconButton(
+              icon: Icon(Icons.close),
+              onPressed: () {
+                jumpChat();
+              }),
         ],
         title: Text('Bonk Chat'),
       ),
@@ -61,7 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
+              stream: _firestore.collection('messages').orderBy('time', descending: false).snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
@@ -69,10 +82,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   );
                 }
 
-                final messages = snapshot.data.docs;
+                var messages = snapshot.data.docs.reversed.toList();
                 return Expanded(
-                  child: ChatListViewBuilder(messages: messages, child: null)
-                );
+                    child: ChatListViewBuilder(
+                  messages: messages,
+                  key: globalKey,
+                ));
               },
             ),
             Container(
@@ -96,7 +111,8 @@ class _ChatScreenState extends State<ChatScreen> {
                       if (messageText != null) {
                         _firestore.collection('messages').add({
                           'text': messageText,
-                          'sender': loggedInUser.email
+                          'sender': loggedInUser.email,
+                          'time': FieldValue.serverTimestamp()
                         });
                         myController.clear();
                       }

@@ -54,7 +54,7 @@ class MyTextFieldInputDecoration {
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-            color: primaryColor, width: SizeConfig.safeBlockHorizontal * 0.8),
+            color: primaryColor, width: SizeConfig.safeBlockHorizontal * 0.55),
         borderRadius: BorderRadius.all(Radius.circular(200)),
       ),
     );
@@ -123,5 +123,92 @@ class ErrorHandling {
       ),
     );
     Scaffold.of(context).showSnackBar(mySnackBar);
+  }
+}
+
+class ResetPasswordButton extends StatefulWidget {
+  @override
+  _ResetPasswordButtonState createState() => _ResetPasswordButtonState();
+}
+
+class _ResetPasswordButtonState extends State<ResetPasswordButton> {
+  final _auth = FirebaseAuth.instance;
+  String email;
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlineButton(
+      padding: EdgeInsets.symmetric(
+          horizontal: SizeConfig.safeBlockHorizontal * 2.5,
+          vertical: SizeConfig.safeBlockVertical),
+      textColor: Colors.deepPurple[700].withOpacity(0.4),
+      borderSide: BorderSide(color: Colors.deepPurple[200].withOpacity(0.3)),
+      onPressed: () {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text('Reset Password'),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextField(
+                      cursorRadius: Radius.circular(20),
+                      cursorColor: Colors.deepPurple[900],
+                      style: TextStyle(color: Colors.deepPurple[900]),
+                      keyboardType: TextInputType.emailAddress,
+                      textAlign: TextAlign.center,
+                      onChanged: (value) {
+                        email = value;
+                      },
+                      decoration: MyTextFieldInputDecoration()
+                          .getInputDecoration(
+                              hintText: 'Enter your email',
+                              primaryColor: Colors.deepPurple[400],
+                              secondaryColor: Colors.deepPurple[100],
+                              textColor: Colors.deepPurple[900]),
+                    ),
+                    SizedBox(
+                      height: SizeConfig.safeBlockVertical * 2,
+                    ),
+                    Text(
+                        'Do you want to send reset password link to your email?'),
+                  ],
+                ),
+                actions: [
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text('No'),
+                  ),
+                  FlatButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        try {
+                          _auth.sendPasswordResetEmail(email: email);
+                        }
+                        catch (e) {
+                          print(e);
+                        }
+                      },
+                      child: Text('Yes'))
+                ],
+              );
+            });
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.settings_backup_restore),
+          SizedBox(
+            width: SizeConfig.safeBlockHorizontal,
+          ),
+          Text('Reset Password'),
+        ],
+      ),
+    );
   }
 }

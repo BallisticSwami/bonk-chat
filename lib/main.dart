@@ -73,6 +73,20 @@ ThemeData myLightTheme = ThemeData(
   snackBarTheme: SnackBarThemeData(
     backgroundColor: Colors.white,
     elevation: 0,
-    contentTextStyle: TextStyle(color: Colors.pink[900], fontSize: 15, fontWeight: FontWeight.w400,),
+    contentTextStyle: TextStyle(
+      color: Colors.pink[900],
+      fontSize: 15,
+      fontWeight: FontWeight.w400,
+    ),
+  ),
+  dialogTheme: DialogTheme(
+    contentTextStyle: TextStyle(
+      color: Colors.deepPurple[900],
+      fontSize: 16,
+    ),
+    titleTextStyle: TextStyle(
+        color: Colors.deepPurple[900],
+        fontSize: 20,
+        fontWeight: FontWeight.w500),
   ),
 );
