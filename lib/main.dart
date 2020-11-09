@@ -1,3 +1,4 @@
+import 'package:bonk_chat/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:bonk_chat/screens/welcome_screen.dart';
 import 'package:bonk_chat/screens/login_screen.dart';
@@ -16,12 +17,6 @@ void main() async {
 class FlashChat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.dark,
-        statusBarIconBrightness: Brightness.dark));
     return MaterialApp(
       theme: myLightTheme,
       initialRoute: WelcomeScreen.id,
@@ -29,33 +24,54 @@ class FlashChat extends StatelessWidget {
       //   WelcomeScreen.id: (context) => WelcomeScreen(),
       //   RegistrationScreen.id: (context) => RegistrationScreen(),
       //   LoginScreen.id: (context) => LoginScreen(),
-      //   ChatScreen.id: (context) => ChatScreen()
+      //   ChatScreen.id: (context) => ChatScreen(),
+      //   MainScreen.id: (context) => MainScreen()
       // },
       onGenerateRoute: (routeSettings) {
         return PageRouteBuilder<dynamic>(
-            settings: routeSettings,
-            pageBuilder: (context, Animation<double> animation,
-                Animation<double> secondaryAnimation) {
-              switch (routeSettings.name) {
-                case WelcomeScreen.id:
-                  return WelcomeScreen();
-                case LoginScreen.id:
-                  return LoginScreen();
-                case RegistrationScreen.id:
-                  return RegistrationScreen();
-                case ChatScreen.id:
-                  return ChatScreen();
-                default:
-                  return null;
-              }
-            },
-            transitionDuration: Duration(milliseconds: 200),
-            reverseTransitionDuration: Duration(milliseconds: 200),
-            transitionsBuilder: (context, Animation<double> animation,
-                Animation<double> secondaryAnimation, Widget child) {
-              return effectMap[PageTransitionType.slideLeft](
-                  Curves.easeOut, animation, secondaryAnimation, child);
+          settings: routeSettings,
+          pageBuilder: (context, Animation<double> animation,
+              Animation<double> secondaryAnimation) {
+            switch (routeSettings.name) {
+              case WelcomeScreen.id:
+                return WelcomeScreen();
+              case LoginScreen.id:
+                return LoginScreen();
+              case RegistrationScreen.id:
+                return RegistrationScreen();
+              case MainScreen.id:
+                return MainScreen();
+              case ChatScreen.id:
+                return ChatScreen();
+              default:
+                return null;
+            }
+          },
+          transitionDuration: Duration(milliseconds: 180),
+          reverseTransitionDuration: Duration(milliseconds: 180),
+          transitionsBuilder: (context, Animation<double> animation,
+              Animation<double> secondaryAnimation, Widget child) {
+            transitionEffect.createCustomEffect(handle: (Curve curve,
+                Animation<double> animation,
+                Animation<double> secondaryAnimation,
+                Widget child) {
+              return ScaleTransition(
+                scale: Tween<double>(
+                  begin: 0.0,
+                  end: 1.0,
+                ).animate(
+                  CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.fastOutSlowIn,
+                  ),
+                ),
+                child: child,
+              );
             });
+            return effectMap[PageTransitionType.custom](
+                Curves.easeOut, animation, secondaryAnimation, child);
+          },
+        );
       },
     );
   }

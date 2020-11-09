@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:bonk_chat/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 final _firestore = FirebaseFirestore.instance;
 User loggedInUser;
@@ -26,9 +27,6 @@ class _ChatScreenState extends State<ChatScreen> {
     super.initState();
     getCurrentUser();
     print(loggedInUser.email);
-    Future.delayed(Duration(milliseconds: 500), () {
-      jumpChat();
-    });
   }
 
   @override
@@ -48,87 +46,92 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  void jumpChat() {
-    globalKey.currentState.animateToListEnd();
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: null,
-        actions: <Widget>[
-          IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                jumpChat();
-              }),
-        ],
-        title: Text('Bonk Chat'),
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').orderBy('time', descending: false).snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: Colors.white,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.light,
+        statusBarIconBrightness: Brightness.light),
+          child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          leading: null,
+          actions: <Widget>[
+            IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
 
-                var messages = snapshot.data.docs.reversed.toList();
-                return Expanded(
-                    child: ChatListViewBuilder(
-                  messages: messages,
-                  key: globalKey,
-                ));
-              },
-            ),
-            Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: myController,
-                      cursorRadius: Radius.circular(20),
-                      cursorHeight: SizeConfig.safeBlockVertical * 2.5,
-                      cursorColor: Colors.deepPurple[900],
-                      onChanged: (value) {
-                        messageText = value;
-                      },
-                      decoration: kMessageTextFieldDecoration,
-                    ),
-                  ),
-                  FlatButton(
-                    onPressed: () {
-                      if (messageText != null) {
-                        _firestore.collection('messages').add({
-                          'text': messageText,
-                          'sender': loggedInUser.email,
-                          'time': FieldValue.serverTimestamp()
-                        });
-                        myController.clear();
-                      }
-                    },
-                    child: Text(
-                      'Send',
-                      style: TextStyle(
-                        color: Colors.deepPurple.shade400,
-                        fontSize: SizeConfig.safeBlockHorizontal * 4.4,
+                }),
+          ],
+          title: Text('Bonk Chat'),
+        ),
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              StreamBuilder<QuerySnapshot>(
+                stream: _firestore.collection('messages').orderBy('time', descending: false).snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+
+                  var messages = snapshot.data.docs.reversed.toList();
+                  return Expanded(
+                      child: ChatListViewBuilder(
+                    messages: messages,
+                    key: globalKey,
+                  ));
+                },
+              ),
+              Container(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        controller: myController,
+                        cursorRadius: Radius.circular(20),
+                        cursorHeight: SizeConfig.safeBlockVertical * 2.5,
+                        cursorColor: Colors.deepPurple[900],
+                        onChanged: (value) {
+                          messageText = value;
+                        },
+                        decoration: kMessageTextFieldDecoration,
                       ),
                     ),
-                  ),
-                ],
+                    FlatButton(
+                      onPressed: () {
+                        if (messageText != null) {
+                          _firestore.collection('messages').add({
+                            'text': messageText,
+                            'sender': loggedInUser.email,
+                            'time': FieldValue.serverTimestamp()
+                          });
+                          myController.clear();
+                        }
+                      },
+                      child: Text(
+                        'Send',
+                        style: TextStyle(
+                          color: Colors.deepPurple.shade400,
+                          fontSize: SizeConfig.safeBlockHorizontal * 4.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
