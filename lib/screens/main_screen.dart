@@ -4,6 +4,10 @@ import 'package:bonk_chat/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
+import 'package:bonk_chat/components/main_widgets.dart';
+
+final _firestore = FirebaseFirestore.instance;
+final _auth = FirebaseAuth.instance;
 
 class MainScreen extends StatefulWidget {
   static const String id = '/main';
@@ -22,13 +26,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light.copyWith(systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarColor: Colors.transparent,
-        statusBarBrightness: Brightness.light,
-        statusBarIconBrightness: Brightness.light),
-          child: Scaffold(
-            body: Stack(
+      value: SystemUiOverlayStyle.light.copyWith(
+          systemNavigationBarColor: Colors.white,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: Brightness.light,
+          statusBarIconBrightness: Brightness.light),
+      child: Scaffold(
+        body: Stack(
           children: [
             Align(
               alignment: Alignment.topCenter,
@@ -46,10 +51,15 @@ class _MainScreenState extends State<MainScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(SizeConfig.safeBlockHorizontal * 9),
+                      topLeft:
+                          Radius.circular(SizeConfig.safeBlockHorizontal * 9),
                       topRight:
                           Radius.circular(SizeConfig.safeBlockHorizontal * 9)),
                 ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: SizeConfig.safeBlockHorizontal*4, vertical: SizeConfig.safeBlockVertical*2),
+                child: ChatList(),
+              ),
               ),
             )
           ],

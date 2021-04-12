@@ -1,4 +1,5 @@
 import 'package:bonk_chat/screens/chat_screen.dart';
+import 'package:bonk_chat/screens/main_screen.dart';
 import 'package:bonk_chat/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:bonk_chat/components/startup_widgets.dart';
@@ -47,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
           setState(() {
             showSpinner = false;
           });
-          Navigator.of(context).pushNamed(ChatScreen.id);
+          Navigator.of(context).pushNamed(MainScreen.id);
         }
       }
     } on FirebaseAuthException catch (e) {
